@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Form, Button, Table, Badge, Card } from 'react-bootstrap';
 import './App.css';
 import { Validator } from './utils/validation';
+import { User } from './types/user';
 
 const App = () => {
   const [formData, setFormData] = useState({
@@ -11,101 +12,120 @@ const App = () => {
     phone: ''
   });
 
-  const [winners, setWinners] = useState([
-    {
-      id: 1,
-      name: 'Amsterdam',
-      dob: '01/10/1990',
-      email: 'email1',
-      phone: '(063) 555-5555'
-    },
-    {
-      id: 2,
-      name: 'Washington',
-      dob: '02/05/1985',
-      email: 'email2',
-      phone: '(063) 555-5555'
-    },
-    {
-      id: 3,
-      name: 'Sydney',
-      dob: '15/08/1987',
-      email: 'email3',
-      phone: '(063) 555-5555'
-    }
+  const [winners, setWinners] = useState<User[]>([]);
+
+  const [users, setUsers] = useState<User[]>([
+    new User('Amsterdam', new Date('1990-10-01'), 'email1', '(063) 555-5555'),
+    new User('Washington', new Date('1985-02-05'), 'email2', '(063) 555-5555'),
+    new User('Sydney', new Date('1987-08-15'), 'email3', '(063) 555-5555')
   ]);
 
-  const handleChange = (e: any ) => {
-    if(e.target.classList.contains('is-invalid') || e.target.classList.contains('is-valid')) {
-      e.target.classList.remove('is-invalid');
-      e.target.classList.remove('is-valid');
-      switch (e.target.name) {
+  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target;
+    if (
+      target.classList.contains('is-invalid') ||
+      target.classList.contains('is-valid')
+    ) {
+      target.classList.remove('is-invalid');
+      target.classList.remove('is-valid');
+      switch (target.name) {
         case 'name':
-          e.target.classList.add(Validator.validateName(e.target.value) ? "is-valid" : "is-invalid");
+          target.classList.add(
+            Validator.validateName(target.value) ? 'is-valid' : 'is-invalid'
+          );
           break;
         case 'dob':
-          e.target.classList.add(Validator.validateDob(new Date(e.target.value)) ? "is-valid" : "is-invalid");
+          target.classList.add(
+            Validator.validateDob(new Date(target.value))
+              ? 'is-valid'
+              : 'is-invalid'
+          );
           break;
         case 'email':
-          e.target.classList.add(Validator.validateEmail(e.target.value) ? "is-valid" : "is-invalid");
+          target.classList.add(
+            Validator.validateEmail(target.value) ? 'is-valid' : 'is-invalid'
+          );
           break;
         case 'phone':
-          e.target.classList.add(Validator.validatePhone(e.target.value) ? "is-valid" : "is-invalid");
+          target.classList.add(
+            Validator.validatePhone(target.value) ? 'is-valid' : 'is-invalid'
+          );
           break;
       }
     }
 
-    
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [target.name]: target.value
     });
   };
 
-  const handleSave = (e: any) => {
-    const form = document.querySelector('form') as HTMLFormElement;
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const form = e.target as HTMLFormElement;
     e.preventDefault();
     if (!Validator.validateForm(form)) {
       e.stopPropagation();
-      console.log('not valid');
       form.classList.add('needs-validation');
     } else {
-      console.log('valid');
-      const newWinner = {
-        id: winners.length + 1,
-        ...formData
-      };
-      setWinners([...winners, newWinner]);
+      const newUser = new User(
+        formData.name,
+        new Date(formData.dob),
+        formData.email,
+        formData.phone
+      );
+
+      setUsers([...users, newUser]);
+
       form.classList.remove('needs-validation');
-      setFormData({ name: '', dob: '', email: '', phone: '' }); // Reset form
+      setFormData({ name: '', dob: '', email: '', phone: '' }); //Clean form
     }
+  };
+
+  const handleNewWinner = () => {
+    const random = Math.floor(
+      Math.random() * users.filter((user) => !winners.includes(user)).length
+    );
+    const winner = users.filter((user) => !winners.includes(user))[random];
+    if (!winners.includes(winner)) setWinners([...winners, winner]);
   };
 
   return (
     <div className="App container mt-5 col-md-6">
       {/* Winners Tags */}
-      <div className="mb-4 d-flex border rounded bg-white align-items-center ">
+      <div className="mb-4 d-flex border rounded bg-white align-items-center">
         <div className="Winners-list ms-2 border rounded">
           {winners.map((winner) => (
             <Badge key={winner.id} bg="info" className="me-2">
               {winner.name}
-              <button type="button" className="close-button" aria-label="Close">
+              <button
+                type="button"
+                className="close-button"
+                aria-label="Close"
+                onClick={() =>
+                  setWinners(winners.filter((w) => w.id !== winner.id))
+                }
+              >
                 <span aria-hidden="true">&times;</span>
               </button>
             </Badge>
           ))}
-          <span className="ms-2 "> Winners</span>
+          <span className="ms-2">Winners</span>
         </div>
-        <Button variant="info" className="btn-info-custom">
+        <Button
+          variant="info"
+          className="btn-info-custom"
+          disabled={users.length === 0 || winners.length === 3}
+          onClick={handleNewWinner}
+        >
           New winner
         </Button>
       </div>
 
       {/* Registration Form */}
-      <div className="card p-4 mb-4">
+      <Card className="p-4 mb-4">
         <h3>REGISTER FORM</h3>
         <p>Please fill in all the fields.</p>
-        <Form className="d-flex flex-column " onSubmit={handleSave} noValidate>
+        <Form className="d-flex flex-column" onSubmit={handleSubmit} noValidate>
           <Form.Group className="mb-3" controlId="formName">
             <Form.Label>Name</Form.Label>
             <Form.Control
@@ -113,9 +133,7 @@ const App = () => {
               placeholder="Enter user name"
               name="name"
               value={formData.name}
-              onChange={handleChange}
-              required={true}
-              minLength={3}
+              onChange={handleChangeInput}
             />
             <Form.Control.Feedback type="invalid">
               Please provide a valid name.
@@ -126,10 +144,9 @@ const App = () => {
             <Form.Label>Date of Birth</Form.Label>
             <Form.Control
               type="date"
-              placeholder="mm/dd/yyyy"
               name="dob"
               value={formData.dob}
-              onChange={handleChange}
+              onChange={handleChangeInput}
             />
             <Form.Control.Feedback type="invalid">
               Date must be between 01.01.1924 and 01.01.2024.
@@ -140,10 +157,9 @@ const App = () => {
             <Form.Label>Email</Form.Label>
             <Form.Control
               type="email"
-              placeholder="Enter email"
               name="email"
               value={formData.email}
-              onChange={handleChange}
+              onChange={handleChangeInput}
             />
             <Form.Control.Feedback type="invalid">
               Please provide a valid email (example@domain).
@@ -154,10 +170,9 @@ const App = () => {
             <Form.Label>Phone number</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter phone number"
               name="phone"
               value={formData.phone}
-              onChange={handleChange}
+              onChange={handleChangeInput}
             />
             <Form.Control.Feedback type="invalid">
               Please provide a valid phone number.
@@ -172,10 +187,10 @@ const App = () => {
             Save
           </Button>
         </Form>
-      </div>
+      </Card>
 
       {/* Winners Table */}
-      <Card className="p4 mb-4">
+      <Card className="p-4 mb-4">
         <Table hover>
           <thead>
             <tr>
@@ -187,11 +202,11 @@ const App = () => {
             </tr>
           </thead>
           <tbody>
-            {winners.map((winner) => (
+            {users.map((winner) => (
               <tr key={winner.id}>
                 <td>{winner.id}</td>
                 <td>{winner.name}</td>
-                <td>{winner.dob}</td>
+                <td>{winner.dob.toLocaleDateString()}</td>
                 <td>{winner.email}</td>
                 <td>{winner.phone}</td>
               </tr>
