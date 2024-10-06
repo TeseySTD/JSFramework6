@@ -28,6 +28,7 @@ html{
   padding: 5px;
   margin: 10px;
   min-width: 80%;
+  user-select: none;
 }
 
 .close-button{

@@ -5,6 +5,8 @@ import { Validator } from './utils/validation';
 import { User } from './types/user';
 
 const App = () => {
+  const _maximumWinners = 3;
+
   const [formData, setFormData] = useState({
     name: '',
     dob: '',
@@ -15,9 +17,24 @@ const App = () => {
   const [winners, setWinners] = useState<User[]>([]);
 
   const [users, setUsers] = useState<User[]>([
-    new User('Amsterdam', new Date('1990-10-01'), 'email1', '(063) 555-5555'),
-    new User('Washington', new Date('1985-02-05'), 'email2', '(063) 555-5555'),
-    new User('Sydney', new Date('1987-08-15'), 'email3', '(063) 555-5555')
+    new User(
+      'Amsterdam',
+      new Date('1990-10-01'),
+      'email1@domain',
+      '(063) 555-5555'
+    ),
+    new User(
+      'Washington',
+      new Date('1985-02-05'),
+      'email2@domain',
+      '(063) 555-5555'
+    ),
+    new User(
+      'Sydney',
+      new Date('1987-08-15'),
+      'email3@domain',
+      '(063) 555-5555'
+    )
   ]);
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,8 +102,12 @@ const App = () => {
     const random = Math.floor(
       Math.random() * users.filter((user) => !winners.includes(user)).length
     );
-    const winner = users.filter((user) => !winners.includes(user))[random];
-    if (!winners.includes(winner)) setWinners([...winners, winner]);
+    try {
+      const winner = users.filter((user) => !winners.includes(user))[random];
+      if (winner && !winners.includes(winner)) setWinners([...winners, winner]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -109,12 +130,12 @@ const App = () => {
               </button>
             </Badge>
           ))}
-          <span className="ms-2">Winners</span>
+          <span className="ms-2 text-muted">Winners</span>
         </div>
         <Button
           variant="info"
           className="btn-info-custom"
-          disabled={users.length === 0 || winners.length === 3}
+          disabled={users.length === 0 || winners.length === _maximumWinners}
           onClick={handleNewWinner}
         >
           New winner
@@ -136,7 +157,8 @@ const App = () => {
               onChange={handleChangeInput}
             />
             <Form.Control.Feedback type="invalid">
-              Please provide a valid name.
+              Name must contains at least {Validator.minimalNameLength}{' '}
+              character(s).
             </Form.Control.Feedback>
           </Form.Group>
 
@@ -149,7 +171,9 @@ const App = () => {
               onChange={handleChangeInput}
             />
             <Form.Control.Feedback type="invalid">
-              Date must be between 01.01.1924 and 01.01.2024.
+              Date must be between{' '}
+              {Validator.minimalBirthDate.toLocaleDateString()} and{' '}
+              {Validator.maximalBirthDate.toLocaleDateString()}.
             </Form.Control.Feedback>
           </Form.Group>
 
@@ -158,6 +182,7 @@ const App = () => {
             <Form.Control
               type="email"
               name="email"
+              placeholder="Enter email (example@domain)"
               value={formData.email}
               onChange={handleChangeInput}
             />
@@ -171,6 +196,7 @@ const App = () => {
             <Form.Control
               type="text"
               name="phone"
+              placeholder="Enter phone number (099) 123-4567"
               value={formData.phone}
               onChange={handleChangeInput}
             />
@@ -191,7 +217,7 @@ const App = () => {
 
       {/* Winners Table */}
       <Card className="p-4 mb-4">
-        <Table hover>
+        <Table>
           <thead>
             <tr>
               <th>#</th>
@@ -202,13 +228,16 @@ const App = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((winner) => (
-              <tr key={winner.id}>
-                <td>{winner.id}</td>
-                <td>{winner.name}</td>
-                <td>{winner.dob.toLocaleDateString()}</td>
-                <td>{winner.email}</td>
-                <td>{winner.phone}</td>
+            {users.map((user) => (
+              <tr
+                key={user.id}
+                className={winners.includes(user) ? 'table-success' : ''}
+              >
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.dob.toLocaleDateString()}</td>
+                <td>{user.email}</td>
+                <td>{user.phone}</td>
               </tr>
             ))}
           </tbody>

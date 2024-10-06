@@ -1,23 +1,28 @@
 export class Validator {
-    private static readonly _minimalBirthDate = new Date('1924-01-01');
-    private static readonly _maximalBirthDate = new Date();
-    private static readonly _minimumNameLength = 1;
     private static readonly _phoneRegex =
         /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
     private static readonly _regexEmail =
         /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
 
+    public static readonly minimalBirthDate = new Date(
+        new Date().setFullYear(new Date().getFullYear() - 100)
+    );
+    public static readonly maximalBirthDate = new Date(
+        new Date().setFullYear(new Date().getFullYear() - 18)
+    );
+    public static readonly minimalNameLength = 1;
+
     static validateEmail(email: string) {
         return this._regexEmail.test(String(email).toLowerCase());
     }
     static validateName(name: string) {
-        return name.length >= this._minimumNameLength;
+        return name.length >= this.minimalNameLength;
     }
     static validatePhone(phone: string) {
         return this._phoneRegex.test(phone);
     }
     static validateDob(dob: Date) {
-        return dob > this._minimalBirthDate && dob < this._maximalBirthDate;
+        return dob > this.minimalBirthDate && dob < this.maximalBirthDate;
     }
 
     static validateForm(form: HTMLFormElement): boolean {
