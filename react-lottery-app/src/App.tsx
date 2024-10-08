@@ -135,6 +135,7 @@ const App = () => {
         <Button
           variant="info"
           className="btn-info-custom"
+          id="new-winner-button"
           disabled={users.length === 0 || winners.length === _maximumWinners}
           onClick={handleNewWinner}
         >

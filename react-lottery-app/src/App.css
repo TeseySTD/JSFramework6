@@ -1,6 +1,28 @@
 html{
   background-color: aliceblue;
 }
+
+/* Small devices (landscape phones, less than 768px) */
+@media (max-width: 768px)  {   
+  html{
+    font-size: calc(0.4em + 1vw);
+  }
+}
+
+/* Medium devices (tablets, less than 992px) */
+@media (max-width: 992px) and ( min-width: 768px)  { 
+  html{
+    font-size: calc(0.3em + 0.8vw);
+  }
+}
+
+/* Large devices (desktops, less than 1200px) */
+@media (max-width: 1199.98px) and ( min-width: 992px) {
+  html{
+    font-size: calc(0.4em + 0.8vw);
+  }
+}
+
 .App{
   background-color: aliceblue;
 }
@@ -31,6 +53,10 @@ html{
   user-select: none;
 }
 
+#new-winner-button{
+  max-width: 15%;
+}
+
 .close-button{
   font-weight: 700;
   font-size: medium;
@@ -45,3 +71,13 @@ html{
 .close-button:hover{
   opacity: .3;
 }
+
+/* h1 {
+  font-size: 5.9vw;
+}
+h2 {
+  font-size: 3.0vh;
+}
+p {
+  font-size: 2vmin;
+} */
