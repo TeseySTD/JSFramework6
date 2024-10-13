@@ -3,6 +3,9 @@ import { Form, Button, Table, Badge, Card } from 'react-bootstrap';
 import './App.css';
 import { Validator } from './utils/validation';
 import { User } from './types/user';
+import UsersTable from './components/UsersTable';
+import WinnersList from './components/WinnersList';
+import RegisterForm from './components/RegisterForm';
 
 const App = () => {
   const _maximumWinners = 3;
@@ -112,138 +115,27 @@ const App = () => {
 
   return (
     <div className="App container mt-5 col-md-6">
-      {/* Winners Tags */}
-      <div className="mb-4 d-flex border rounded bg-white align-items-center">
-        <div className="Winners-list ms-2 border rounded">
-          {winners.map((winner) => (
-            <Badge key={winner.id} bg="info" className="me-2">
-              {winner.name}
-              <button
-                type="button"
-                className="close-button"
-                aria-label="Close"
-                onClick={() =>
-                  setWinners(winners.filter((w) => w.id !== winner.id))
-                }
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </Badge>
-          ))}
-          <span className="ms-2 text-muted">Winners</span>
-        </div>
-        <Button
-          variant="info"
-          className="btn-info-custom"
-          id="new-winner-button"
-          disabled={users.length === 0 || winners.length === _maximumWinners}
-          onClick={handleNewWinner}
-        >
-          New winner
-        </Button>
-      </div>
+      {/* Winners List */}
+      <WinnersList
+        winners={winners}
+        users={users}
+        maximumWinners={_maximumWinners}
+        setWinners={setWinners}
+        handleNewWinner={handleNewWinner}
+      />
 
       {/* Registration Form */}
-      <Card className="p-4 mb-4">
-        <h3>REGISTER FORM</h3>
-        <p>Please fill in all the fields.</p>
-        <Form className="d-flex flex-column" onSubmit={handleSubmit} noValidate>
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter user name"
-              name="name"
-              value={formData.name}
-              onChange={handleChangeInput}
-            />
-            <Form.Control.Feedback type="invalid">
-              Name must contains at least {Validator.minimalNameLength}{' '}
-              character(s).
-            </Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formDob">
-            <Form.Label>Date of Birth</Form.Label>
-            <Form.Control
-              type="date"
-              name="dob"
-              value={formData.dob}
-              onChange={handleChangeInput}
-            />
-            <Form.Control.Feedback type="invalid">
-              Date must be between{' '}
-              {Validator.minimalBirthDate.toLocaleDateString()} and{' '}
-              {Validator.maximalBirthDate.toLocaleDateString()}.
-            </Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formEmail">
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              type="email"
-              name="email"
-              placeholder="Enter email (example@domain)"
-              value={formData.email}
-              onChange={handleChangeInput}
-            />
-            <Form.Control.Feedback type="invalid">
-              Please provide a valid email (example@domain).
-            </Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formPhone">
-            <Form.Label>Phone number</Form.Label>
-            <Form.Control
-              type="text"
-              name="phone"
-              placeholder="Enter phone number (099) 123-4567"
-              value={formData.phone}
-              onChange={handleChangeInput}
-            />
-            <Form.Control.Feedback type="invalid">
-              Please provide a valid phone number.
-            </Form.Control.Feedback>
-          </Form.Group>
-
-          <Button
-            variant="info"
-            type="submit"
-            className="btn-info-custom align-self-end"
-          >
-            Save
-          </Button>
-        </Form>
-      </Card>
+      <RegisterForm
+        formData={formData}
+        handleChangeInput={handleChangeInput}
+        onSubmit={handleSubmit}
+      />
 
       {/* Winners Table */}
-      <Card className="p-4 mb-4">
-        <Table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Date of Birth</th>
-              <th>Email</th>
-              <th>Phone number</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr
-                key={user.id}
-                className={winners.includes(user) ? 'table-success' : ''}
-              >
-                <td>{user.id}</td>
-                <td>{user.name}</td>
-                <td>{user.dob.toLocaleDateString()}</td>
-                <td>{user.email}</td>
-                <td>{user.phone}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </Card>
+      <UsersTable
+        users={users}
+        winners={winners}
+      />
     </div>
   );
 };
