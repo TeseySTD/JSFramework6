@@ -14,20 +14,6 @@ interface InputFieldProps {
 
 const InputField = (props: InputFieldProps) => {
   return (
-    // <Form.Group className="mb-3" controlId="formName">
-    //   <Form.Label>Name</Form.Label>
-    //   <Form.Control
-    //     type="text"
-    //     placeholder="Enter user name"
-    //     name="name"
-    //     value={formData.name}
-    //     onChange={handleChangeInput}
-    //   />
-    //   <Form.Control.Feedback type="invalid">
-    //     Name must contains at least {Validator.minimalNameLength} character(s).
-    //   </Form.Control.Feedback>
-    // </Form.Group>
-
     <div className="mb-3">
       <label className="form-label" htmlFor={props.id}>
         {props.label}

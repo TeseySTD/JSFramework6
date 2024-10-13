@@ -45,6 +45,12 @@ html{
   color:white
 }
 
+.btn-info-custom:hover{
+  color:white
+}
+.btn-info.btn-info-custom:active{
+  color:white
+}
 
 .Winners-list{ 
   padding: 5px;

@@ -1,8 +1,12 @@
+import { UserRepo } from "./user-repo";
+
 export class Validator {
     private static readonly _phoneRegex =
         /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
     private static readonly _regexEmail =
         /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
+
+    private static _userRepo : UserRepo;
 
     public static readonly minimalBirthDate = new Date(
         new Date().setFullYear(new Date().getFullYear() - 100)
@@ -13,8 +17,20 @@ export class Validator {
     public static readonly minimalNameLength = 1;
 
     static validateEmail(email: string) {
-        return this._regexEmail.test(String(email).toLowerCase());
+        return this._regexEmail.test(String(email).toLowerCase()) && Validator.isEmailUnique(email);
     }
+    static isEmailUnique(email: string): boolean {
+        if (!this._userRepo) {
+            console.warn("UserRepo is not set for email uniqueness validation.");
+            return true;
+        }
+
+        const existingUser = this._userRepo.users.find(
+            (user) => user.email.toLowerCase() === email.toLowerCase()
+        );
+        return !existingUser;
+    }
+
     static validateName(name: string) {
         return name.length >= this.minimalNameLength;
     }
@@ -68,5 +84,49 @@ export class Validator {
             }
         }
         return isValid;
+    }
+
+    static validateInput(target: HTMLInputElement) {
+        if (
+            target.classList.contains('is-invalid') ||
+            target.classList.contains('is-valid')
+        ) {
+            target.classList.remove('is-invalid');
+            target.classList.remove('is-valid');
+            switch (target.name) {
+                case 'name':
+                    target.classList.add(
+                        Validator.validateName(target.value)
+                            ? 'is-valid'
+                            : 'is-invalid'
+                    );
+                    break;
+                case 'dob':
+                    target.classList.add(
+                        Validator.validateDob(new Date(target.value))
+                            ? 'is-valid'
+                            : 'is-invalid'
+                    );
+                    break;
+                case 'email':
+                    target.classList.add(
+                        Validator.validateEmail(target.value)
+                            ? 'is-valid'
+                            : 'is-invalid'
+                    );
+                    break;
+                case 'phone':
+                    target.classList.add(
+                        Validator.validatePhone(target.value)
+                            ? 'is-valid'
+                            : 'is-invalid'
+                    );
+                    break;
+            }
+        }
+    }
+
+    public static set userRepo(userRepo: UserRepo) {
+        this._userRepo = userRepo;
     }
 }
