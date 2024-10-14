@@ -1,5 +1,4 @@
 export class User {
-    // private static _idCounter: number = 1;
     readonly id: string;
     name: string;
     dob: Date;

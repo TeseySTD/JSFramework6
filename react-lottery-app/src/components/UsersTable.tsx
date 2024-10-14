@@ -5,22 +5,21 @@ import DefaultButton from './DefaultButton';
 import SearchBar from './SearchBar';
 import { useEffect, useState } from 'react';
 interface UsersTableProps {
-  userRepo: UserRepo;
+  // userRepo: UserRepo;
 }
 const UsersTable = (props: UsersTableProps) => {
   const [tableDate, setTableDate] = useState<User[]>(() => {
-    const users = props.userRepo.users;
+    const users = UserRepo.users;
     return users;
   });
 
   useEffect(() => {
-    setTableDate(props.userRepo.users);
-  }, [props.userRepo.users]);
-  
+    setTableDate(UserRepo.users);
+  }, [UserRepo.users]);
 
   const searchUsers = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchText = event.target.value;
-    const users = props.userRepo.users;
+    const users = UserRepo.users;
     const filteredUsers = users.filter((user) =>
       user.name.toLowerCase().includes(searchText.toLowerCase())
     );
@@ -28,8 +27,8 @@ const UsersTable = (props: UsersTableProps) => {
   };
 
   return (
-    <div className="p-4 mb-4 card">
-      <SearchBar changeHandler={searchUsers} className='mb-3'/>
+    <div className="p-4 mb-4 card table-responsive text-break">
+      <SearchBar changeHandler={searchUsers} className="mb-3" />
       <table className="table">
         <thead>
           <tr>
@@ -39,7 +38,9 @@ const UsersTable = (props: UsersTableProps) => {
               <button
                 type="button"
                 className="btn btn-outline-secondary btn-sm ms-2"
-                onClick={() => {props.userRepo.sortUsersByName();}}
+                onClick={() => {
+                  UserRepo.sortUsersByName();
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -63,7 +64,9 @@ const UsersTable = (props: UsersTableProps) => {
               <button
                 type="button"
                 className="btn btn-outline-secondary btn-sm ms-2"
-                onClick={() =>{props.userRepo.sortUsersByDate();}}
+                onClick={() => {
+                  UserRepo.sortUsersByDate();
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -88,9 +91,7 @@ const UsersTable = (props: UsersTableProps) => {
             <tr
               key={user.id}
               className={
-                props.userRepo.getWinners().includes(user)
-                  ? 'table-success'
-                  : ''
+                UserRepo.getWinners().includes(user) ? 'table-success' : ''
               }
             >
               <td>{user.id}</td>
@@ -103,13 +104,11 @@ const UsersTable = (props: UsersTableProps) => {
                   className="btn btn-success me-2 btn-sm"
                   data-bs-toggle="modal"
                   data-bs-target="#updateModal"
-                  onClick={() =>
-                    {
-                      document
+                  onClick={() => {
+                    document
                       .getElementById('updateModal')
-                      ?.setAttribute('id-to-update', user.id)
-                    }
-                  }
+                      ?.setAttribute('id-to-update', user.id);
+                  }}
                 >
                   Update
                 </button>

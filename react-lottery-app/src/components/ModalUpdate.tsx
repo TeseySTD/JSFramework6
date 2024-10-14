@@ -7,7 +7,7 @@ import { Validator } from '../utils/validation';
 import { InputData } from '../interfaces/input-data';
 
 interface ModalProps {
-  userRepo: UserRepo;
+  // userRepo: UserRepo;
 }
 
 const ModalUpdate = (props: ModalProps) => {
@@ -22,21 +22,18 @@ const ModalUpdate = (props: ModalProps) => {
   const getInputData = () => {
     const modal = document.getElementById('updateModal');
     const id = modal?.getAttribute('id-to-update') as string;
-    const user = props.userRepo.getUserById(id);
-    console.log("id", id);
-    console.log("user", user);
+    const user = UserRepo.getUserById(id);
     if (user) {
       setInputData({
         name: user.name || '',
-        dob: user.dob ? new Date(user.dob).toISOString().split('T')[0] : '',// Format to YYYY-MM-DD for date input
+        dob: user.dob ? new Date(user.dob).toISOString().split('T')[0] : '', // Format to YYYY-MM-DD for date input
         email: user.email || '',
         phone: user.phone || ''
       });
     }
-    console.log("input data", inputData);
+    console.log('input data', inputData);
   };
 
-  // Run getInputData when the modal is opened
   useEffect(() => {
     const modal = document.getElementById('updateModal');
     modal?.addEventListener('shown.bs.modal', getInputData);
@@ -67,20 +64,20 @@ const ModalUpdate = (props: ModalProps) => {
           } else {
             const modal = document.getElementById('updateModal');
             const id = modal?.getAttribute('id-to-update') as string;
-            const user = props.userRepo.getUserById(id);
+            const user = UserRepo.getUserById(id);
+            console.log('user update', user);
             const data = new FormData(form);
             if (user) {
               user.name = data.get('name') as string;
               user.dob = new Date(data.get('dob') as string);
-              // user.email = data.get('email') as string;
               user.phone = data.get('phone') as string;
-              props.userRepo.updateUser(user);
+              UserRepo.updateUser(user);
               form.classList.remove('needs-validation');
               form.reset();
             }
           }
         }}
-        inputData={inputData} // Pass the fetched data here
+        inputData={inputData}
       />
     </Modal>
   );

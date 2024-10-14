@@ -78,6 +78,23 @@ html{
   opacity: .3;
 }
 
+.bd-search::after {
+  position:relative;
+  top:.4rem;
+  right:.4rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:1.5rem;
+  padding-right:.25rem;
+  padding-left:.25rem;
+  font-size:.75rem;
+  color:#6c757d;
+  content:"Ctrl + /";
+  border:1px solid #dee2e6;
+  border-radius:.125rem
+}
+
 /* h1 {
   font-size: 5.9vw;
 }

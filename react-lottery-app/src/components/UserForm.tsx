@@ -23,12 +23,12 @@ const UserForm = (props: UserFormProps) => {
   });
 
   useEffect(() => {
-    if(props.inputData) {
-      console.log("form message");
+    if (props.inputData) {
+      console.log('form message');
 
       setInputData(props.inputData);
     }
-  },[props.inputData])
+  }, [props.inputData]);
 
   return (
     <form
@@ -63,9 +63,9 @@ const UserForm = (props: UserFormProps) => {
         }}
         validationMessage={`Date must be between ${Validator.minimalBirthDate.toLocaleDateString()} and ${Validator.maximalBirthDate.toLocaleDateString()}.`}
       ></InputField>
-      
-      {props.addEmailField ?
-        (<InputField
+
+      {props.addEmailField ? (
+        <InputField
           label="Email"
           placeholder="Enter email (example@domain)"
           name="email"
@@ -74,9 +74,13 @@ const UserForm = (props: UserFormProps) => {
           value={inputData.email}
           onChange={(e) => {
             setInputData({ ...inputData, email: e.target.value });
-            Validator.validateInputOnChange(e.target, props.checkEmailUniqueness);
+            Validator.validateInputOnChange(
+              e.target,
+              props.checkEmailUniqueness
+            );
           }}
-        ></InputField>) : (null)}
+        ></InputField>
+      ) : null}
 
       <InputField
         label="Phone number"

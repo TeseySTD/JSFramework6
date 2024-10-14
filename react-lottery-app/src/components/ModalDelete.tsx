@@ -2,7 +2,7 @@ import { UserRepo } from '../utils/user-repo';
 import Modal from './Modal';
 
 interface ModalDeleteProps {
-  userRepo: UserRepo;
+  // userRepo: UserRepo;
 }
 const ModalDelete = (props: ModalDeleteProps) => {
   return (
@@ -17,8 +17,8 @@ const ModalDelete = (props: ModalDeleteProps) => {
           onClick={() => {
             const modal = document.getElementById('deleteModal');
             const id = modal?.getAttribute('id-to-delete') as string;
-            const user = props.userRepo.getUserById(id);
-            props.userRepo.deleteUser(user!);
+            const user = UserRepo.getUserById(id);
+            UserRepo.deleteUser(user!);
           }}
         >
           Delete

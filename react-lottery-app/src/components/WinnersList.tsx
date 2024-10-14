@@ -3,21 +3,30 @@ import { UserRepo } from '../utils/user-repo';
 import DefaultButton from './DefaultButton';
 import WinnerItem from './WinnerItem';
 interface WinnerItemProps {
-  userRepo: UserRepo;
   maximumWinners: number;
-  handleNewWinner: React.MouseEventHandler<HTMLButtonElement>;
+  // handleNewWinner: React.MouseEventHandler<HTMLButtonElement>;
 }
 const WinnersList = (props: WinnerItemProps) => {
+  const handleNewWinner = () => {
+    const nonWinners = UserRepo.users.filter((user) => !user.isWinner);
+    const random = Math.floor(Math.random() * nonWinners.length);
+    const winner = nonWinners[random];
+    if (winner) {
+      winner.isWinner = true;
+      UserRepo.updateUser(winner);
+    }
+  };
+
   return (
     <div className="mb-4 d-flex border rounded bg-white align-items-center">
       <div className="Winners-list ms-2 border rounded">
-        {props.userRepo.getWinners().map((winner) => (
+        {UserRepo.getWinners().map((winner) => (
           <WinnerItem
             name={winner.name}
             className="me-2"
             onDelete={() => {
               winner.isWinner = false;
-              props.userRepo.updateUser(winner);
+              UserRepo.updateUser(winner);
             }}
           />
         ))}
@@ -27,10 +36,10 @@ const WinnersList = (props: WinnerItemProps) => {
         className="btn-info-custom"
         id="new-winner-button"
         disabled={
-          props.userRepo.users.length === 0 ||
-          props.userRepo.getWinners().length === props.maximumWinners
+          UserRepo.users.length === 0 ||
+          UserRepo.getWinners().length === props.maximumWinners
         }
-        onClick={props.handleNewWinner}
+        onClick={handleNewWinner}
       >
         New winner
       </DefaultButton>
