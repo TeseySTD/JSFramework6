@@ -14,7 +14,7 @@ const RegisterForm = (props: RegisterFormProps) => {
     <div className="p-4 mb-4 card">
       <h3>REGISTER FORM</h3>
       <p>Please fill in all the fields.</p>
-      <UserForm onSubmit={props.onSubmit}>
+      <UserForm onSubmit={props.onSubmit} checkEmailUniqueness={true} addEmailField={true}>
         <DefaultButton type="submit" className="btn-info-custom align-self-end">
           Save
         </DefaultButton>

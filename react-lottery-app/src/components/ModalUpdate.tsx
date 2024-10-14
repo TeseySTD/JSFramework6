@@ -1,10 +1,9 @@
-import { ChangeEventHandler, FormEventHandler } from 'react';
+import { useEffect, useState } from 'react';
 import UserForm from './UserForm';
 import Modal from './Modal';
 import DefaultButton from './DefaultButton';
 import { UserRepo } from '../utils/user-repo';
 import { Validator } from '../utils/validation';
-import { User } from '../types/user';
 import { InputData } from '../interfaces/input-data';
 
 interface ModalProps {
@@ -12,18 +11,36 @@ interface ModalProps {
 }
 
 const ModalUpdate = (props: ModalProps) => {
+  const [inputData, setInputData] = useState<InputData>({
+    name: '',
+    dob: '',
+    email: '',
+    phone: ''
+  });
+
+  // Fetch the user data and update the inputData state
   const getInputData = () => {
     const modal = document.getElementById('updateModal');
     const id = modal?.getAttribute('id-to-update') as string;
     const user = props.userRepo.getUserById(id);
-    const formData: InputData = {
-      name: user?.name || '',
-      dob: (user?.dob || '') as string,
-      email: user?.email || '',
-      phone: user?.phone || ''
-    };
-    return formData;
+    console.log("id", id);
+    console.log("user", user);
+    if (user) {
+      setInputData({
+        name: user.name || '',
+        dob: user.dob ? new Date(user.dob).toISOString().split('T')[0] : '',// Format to YYYY-MM-DD for date input
+        email: user.email || '',
+        phone: user.phone || ''
+      });
+    }
+    console.log("input data", inputData);
   };
+
+  // Run getInputData when the modal is opened
+  useEffect(() => {
+    const modal = document.getElementById('updateModal');
+    modal?.addEventListener('shown.bs.modal', getInputData);
+  }, []);
 
   return (
     <Modal
@@ -33,6 +50,7 @@ const ModalUpdate = (props: ModalProps) => {
         <DefaultButton
           type="submit"
           className="btn-info-custom"
+          // dataBsDismiss="modal"
           form="updateForm"
         >
           Update
@@ -54,7 +72,7 @@ const ModalUpdate = (props: ModalProps) => {
             if (user) {
               user.name = data.get('name') as string;
               user.dob = new Date(data.get('dob') as string);
-              user.email = data.get('email') as string;
+              // user.email = data.get('email') as string;
               user.phone = data.get('phone') as string;
               props.userRepo.updateUser(user);
               form.classList.remove('needs-validation');
@@ -62,7 +80,7 @@ const ModalUpdate = (props: ModalProps) => {
             }
           }
         }}
-        inputData={getInputData()}
+        inputData={inputData} // Pass the fetched data here
       />
     </Modal>
   );

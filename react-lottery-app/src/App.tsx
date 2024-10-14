@@ -14,19 +14,19 @@ function getUsers(): User[] {
     new User(
       'Amsterdam',
       new Date('1990-10-01'),
-      'email1@domain',
+      'email1@domain.com',
       '(063) 555-5555'
     ),
     new User(
       'Washington',
       new Date('1985-02-05'),
-      'email2@domain',
+      'email2@domain.com',
       '(063) 555-5555'
     ),
     new User(
       'Sydney',
       new Date('1987-08-15'),
-      'email3@domain',
+      'email3@domain.com',
       '(063) 555-5555'
     )
   ];
@@ -52,9 +52,10 @@ const App = () => {
   Validator.userRepo = userRepo;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log('Form submitted');
     e.preventDefault();
     const form = e.target as HTMLFormElement;
-    if (!Validator.validateForm(form)) {
+    if (!Validator.validateForm(form, true)) {
       form.classList.add('needs-validation');
     } else {
       const data = new FormData(form);

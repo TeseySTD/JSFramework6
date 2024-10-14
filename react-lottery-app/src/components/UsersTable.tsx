@@ -104,9 +104,11 @@ const UsersTable = (props: UsersTableProps) => {
                   data-bs-toggle="modal"
                   data-bs-target="#updateModal"
                   onClick={() =>
-                    document
+                    {
+                      document
                       .getElementById('updateModal')
                       ?.setAttribute('id-to-update', user.id)
+                    }
                   }
                 >
                   Update

@@ -14,17 +14,21 @@ interface UserFormProps {
   children?: React.ReactNode;
   id?: string;
   inputData?: InputData;
+  checkEmailUniqueness?: boolean;
+  addEmailField?: boolean;
 }
 const UserForm = (props: UserFormProps) => {
-  console.log(props.inputData);
   const [inputData, setInputData] = useState<InputData>({
     ...((props.inputData ?? {}) as InputData)
   });
-  //   useEffect(() => {
-  //   if(props.inputData) {
-  //     setInputData(props.inputData);
-  //   }
-  // },[])
+
+  useEffect(() => {
+    if(props.inputData) {
+      console.log("form message");
+
+      setInputData(props.inputData);
+    }
+  },[props.inputData])
 
   return (
     <form
@@ -42,7 +46,7 @@ const UserForm = (props: UserFormProps) => {
         id="formName"
         onChange={(e) => {
           setInputData({ ...inputData, name: e.target.value });
-          Validator.validateInput(e.target);
+          Validator.validateInputOnChange(e.target, props.checkEmailUniqueness);
         }}
         validationMessage={`Name must contains at least ${Validator.minimalNameLength} character(s).`}
       ></InputField>
@@ -55,24 +59,24 @@ const UserForm = (props: UserFormProps) => {
         value={inputData.dob}
         onChange={(e) => {
           setInputData({ ...inputData, dob: e.target.value });
-          Validator.validateInput(e.target);
+          Validator.validateInputOnChange(e.target, props.checkEmailUniqueness);
         }}
         validationMessage={`Date must be between ${Validator.minimalBirthDate.toLocaleDateString()} and ${Validator.maximalBirthDate.toLocaleDateString()}.`}
       ></InputField>
-
-      <InputField
-        label="Email"
-        placeholder="Enter email (example@domain)"
-        name="email"
-        type="email"
-        id="formEmail"
-        value={inputData.email}
-        onChange={(e) => {
-          setInputData({ ...inputData, email: e.target.value });
-          Validator.validateInput(e.target);
-        }}
-        validationMessage="Please provide a valid email (example@domain)."
-      ></InputField>
+      
+      {props.addEmailField ?
+        (<InputField
+          label="Email"
+          placeholder="Enter email (example@domain)"
+          name="email"
+          type="email"
+          id="formEmail"
+          value={inputData.email}
+          onChange={(e) => {
+            setInputData({ ...inputData, email: e.target.value });
+            Validator.validateInputOnChange(e.target, props.checkEmailUniqueness);
+          }}
+        ></InputField>) : (null)}
 
       <InputField
         label="Phone number"
@@ -83,7 +87,7 @@ const UserForm = (props: UserFormProps) => {
         value={inputData.phone}
         onChange={(e) => {
           setInputData({ ...inputData, phone: e.target.value });
-          Validator.validateInput(e.target);
+          Validator.validateInputOnChange(e.target, props.checkEmailUniqueness);
         }}
         validationMessage="Please provide a valid phone number."
       ></InputField>
