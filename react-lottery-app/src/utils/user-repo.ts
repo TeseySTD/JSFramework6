@@ -35,6 +35,14 @@ export class UserRepo {
         return usersList;
     }
 
+    public static GenerateUserId(): string {
+        return (
+            this.users
+                .map((user) => user.id)
+                .reduce((prev, curr) => prev + curr) + 1
+        );
+    }
+
     public static get users(): User[] {
         return UserRepo._users;
     }
@@ -58,7 +66,7 @@ export class UserRepo {
     }
 
     public static getUserById(id: string): User | undefined {
-        return UserRepo._users.find((user) => user.id === id);
+        return UserRepo._users.find((user) => user.id == id);
     }
 
     public static getWinners(): User[] {

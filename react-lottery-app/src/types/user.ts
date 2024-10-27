@@ -1,3 +1,5 @@
+import { UserRepo } from "../utils/user-repo";
+
 export class User {
     readonly id: string;
     email: string;
@@ -8,7 +10,7 @@ export class User {
     isWinner: boolean = false;
 
     constructor(email: string, password: string, name: string, role: string, avatar: string, id?: string, isWinner?: boolean) {
-        this.id = id ?? (Math.random().toString(36).substring(7));
+        this.id = id ?? UserRepo.GenerateUserId();
         this.name = name;
         this.email = email;
         this.password = password;

@@ -21,9 +21,9 @@ const RegisterForm = (props: RegisterFormProps) => {
     } else {
       const data = new FormData(form);
       const newUser = new User(
-        data.get('name') as string,
         data.get('email') as string,
         data.get('password') as string,
+        data.get('name') as string,
         data.get('role') as string,
         data.get('avatar') as string
       );

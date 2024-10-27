@@ -71,7 +71,6 @@ const ModalUpdate = (props: ModalProps) => {
             const data = new FormData(form);
             if (user) {
               user.name = data.get('name') as string;
-              user.email = data.get('email') as string;
               user.password = data.get('password') as string;
               user.role = data.get('role') as string;
               user.avatar = data.get('avatar') as string;

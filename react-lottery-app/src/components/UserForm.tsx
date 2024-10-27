@@ -110,6 +110,7 @@ const UserForm = (props: UserFormProps) => {
         }}
         validationMessage={`Avatar must be link.`}
       ></InputField>
+      {props.children}
     </form>
   );
 };

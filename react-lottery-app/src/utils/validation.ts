@@ -67,10 +67,11 @@ export class Validator {
     ): boolean {
         let isValid: boolean = true;
         const formName = form.querySelector('#formName') as HTMLInputElement;
-        const formDob = form.querySelector('#formDob') as HTMLInputElement;
+        const formPassword = form.querySelector('#formPassword') as HTMLInputElement;
+        const formAvatar = form.querySelector('#formAvatar') as HTMLInputElement;
+        const formRole = form.querySelector('#formRole') as HTMLInputElement;
         const formEmail = form.querySelector('#formEmail') as HTMLInputElement;
-        const formPhone = form.querySelector('#formPhone') as HTMLInputElement;
-        const inputs = [formName, formDob, formEmail, formPhone];
+        const inputs = [formName, formPassword, formRole, formEmail, formAvatar];
 
         inputs.forEach((input) => {
             if (input) {
