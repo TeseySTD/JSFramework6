@@ -38,6 +38,7 @@ const UsersTable = (props: UsersTableProps) => {
               <button
                 type="button"
                 className="btn btn-outline-secondary btn-sm ms-2"
+                id="sort-name-button"
                 onClick={() => {
                   UserRepo.sortUsersByName();
                 }}
@@ -59,30 +60,9 @@ const UsersTable = (props: UsersTableProps) => {
                 <span className="visually-hidden">Button</span>
               </button>
             </th>
-            <th>
-              Date of Birth
-              <button
-                type="button"
-                className="btn btn-outline-secondary btn-sm ms-2"
-                onClick={() => {
-                  UserRepo.sortUsersByDate();
-                }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-sort-down"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M3.5 2.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 11.293zm3.5 1a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z" />
-                </svg>
-                <span className="visually-hidden">Button</span>
-              </button>
-            </th>
             <th>Email</th>
-            <th>Phone number</th>
+            <th>Avatar</th>
+            <th>Role</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -96,9 +76,16 @@ const UsersTable = (props: UsersTableProps) => {
             >
               <td>{user.id}</td>
               <td>{user.name}</td>
-              <td>{user.dob.toLocaleDateString()}</td>
               <td>{user.email}</td>
-              <td>{user.phone}</td>
+              <td>
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  className="rounded-circle"
+                  style={{ width: '50px', height: '50px' }}
+                />
+              </td>
+              <td>{user.role}</td>
               <td className="d-flex">
                 <button
                   className="btn btn-success me-2 btn-sm"

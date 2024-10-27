@@ -8,6 +8,7 @@ export class KeyManager {
 
     private static checkKeyEvent() {
         document.addEventListener('keydown', (e) => {
+            console.log(this._keysPressed);
             this._keysPressed[e.key ] =  true;
         })
         document.addEventListener('keyup', (e) => {

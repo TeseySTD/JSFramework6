@@ -1,4 +1,5 @@
 import { User } from '../types/user';
+import { UserFakeApi } from './user-fake-api';
 
 export class UserRepo {
     private static _users: User[];
@@ -14,38 +15,30 @@ export class UserRepo {
         UserRepo._setStateAction = setStateAction;
     }
 
-    public static SeedData(): User[] {
-        const defaultUsers = [
-            new User(
-                'Amsterdam',
-                new Date('1990-10-01'),
-                'email1@domain.com',
-                '(063) 555-5555'
-            ),
-            new User(
-                'Washington',
-                new Date('1985-02-05'),
-                'email2@domain.com',
-                '(063) 555-5555'
-            ),
-            new User(
-                'Sydney',
-                new Date('1987-08-15'),
-                'email3@domain.com',
-                '(063) 555-5555'
-            )
-        ];
+    public static async SeedData(): Promise<User[]> {
         const users = localStorage.getItem('users');
-        let usersList = users ? JSON.parse(users) : defaultUsers;
-        if (usersList.length == 0) usersList = defaultUsers;
+        let usersList;
+        if(users == null) {
+            // console.log('users list from storage is empty');
+            usersList = await UserFakeApi.getUsers();}
+        else{
+            // console.log('users list', users);
+            usersList = JSON.parse(users);
+            if (usersList.length == 0) {
+                // console.log('users list is empty');
+                usersList = await UserFakeApi.getUsers();
+            }
+            console.log(usersList);
+        }
 
-        usersList.forEach((user: User) => (user.dob = new Date(user.dob)));
+
         return usersList;
     }
 
     public static get users(): User[] {
         return UserRepo._users;
     }
+    
     public static updateUser(user: User): void {
         UserRepo._setStateAction(
             (UserRepo._users = UserRepo._users.map((u) =>
@@ -81,12 +74,12 @@ export class UserRepo {
         console.log(sortedUsers);
     }
 
-    public static sortUsersByDate() {
-        console.log('sorting by date');
-        const sortedUsers = [...UserRepo._users].sort(
-            (a, b) => a.dob.getTime() - b.dob.getTime()
-        );
-        UserRepo._setStateAction(sortedUsers);
-        console.log(sortedUsers);
-    }
+    // public static sortUsersByDate() {
+    //     console.log('sorting by date');
+    //     const sortedUsers = [...UserRepo._users].sort(
+    //         (a, b) => a.dob.getTime() - b.dob.getTime()
+    //     );
+    //     UserRepo._setStateAction(sortedUsers);
+    //     console.log(sortedUsers);
+    // }
 }

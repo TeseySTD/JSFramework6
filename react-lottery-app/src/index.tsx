@@ -6,13 +6,22 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import { createBrowserRouter, RouterProvider, Router} from "react-router-dom";
+import AppHeader from './components/AppHeader';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App/>,
+  },
+]);
 root.render(
   <React.StrictMode>
-    <App />
+    <AppHeader title="Lottery" />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 

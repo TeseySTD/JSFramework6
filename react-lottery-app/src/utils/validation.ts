@@ -7,13 +7,13 @@ export class Validator {
     private static readonly _regexEmail =
         /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
 
-    public static readonly minimalBirthDate = new Date(
-        new Date().setFullYear(new Date().getFullYear() - 100)
-    );
-    public static readonly maximalBirthDate = new Date(
-        new Date().setFullYear(new Date().getFullYear() - 18)
-    );
+    private static readonly _regexURL =
+        /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
+
     public static readonly minimalNameLength = 1;
+    public static readonly minimalPasswordLength = 4;
+    public static readonly minimalRoleLength = 2;
+
 
     static validateEmailFormat(email: string): boolean {
         return this._regexEmail.test(String(email).toLowerCase());
@@ -49,12 +49,16 @@ export class Validator {
         return name.length >= this.minimalNameLength;
     }
 
-    static validatePhone(phone: string): boolean {
-        return this._phoneRegex.test(phone);
+    static validatePassword(password: string): boolean {
+        return password.length >= this.minimalPasswordLength;
     }
 
-    static validateDob(dob: Date): boolean {
-        return dob > this.minimalBirthDate && dob < this.maximalBirthDate;
+    static validateRole(role: string): boolean {
+        return role.length >= this.minimalRoleLength;
+    }
+
+    static validateAvatar(avatar: string): boolean {
+        return this._regexURL.test(avatar);
     }
 
     static validateForm(
@@ -100,14 +104,17 @@ export class Validator {
             case 'name':
                 isValid = this.validateName(target.value);
                 break;
-            case 'dob':
-                isValid = this.validateDob(new Date(target.value));
+            case 'password':
+                isValid = this.validatePassword(target.value);
                 break;
             case 'email':
                 isValid = this.validateEmail(target, checkEmailUniqueness);
                 break;
-            case 'phone':
-                isValid = this.validatePhone(target.value);
+            case 'role':
+                isValid = this.validateRole(target.value);
+                break;
+            case 'avatar':
+                isValid = this.validateAvatar(target.value);
                 break;
         }
         target.classList.add(isValid ? 'is-valid' : 'is-invalid');

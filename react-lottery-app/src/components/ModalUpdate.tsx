@@ -12,10 +12,11 @@ interface ModalProps {
 
 const ModalUpdate = (props: ModalProps) => {
   const [inputData, setInputData] = useState<InputData>({
-    name: '',
-    dob: '',
     email: '',
-    phone: ''
+    password: '',
+    name: '',
+    role: '',
+    avatar: ''
   });
 
   // Fetch the user data and update the inputData state
@@ -25,10 +26,11 @@ const ModalUpdate = (props: ModalProps) => {
     const user = UserRepo.getUserById(id);
     if (user) {
       setInputData({
-        name: user.name || '',
-        dob: user.dob ? new Date(user.dob).toISOString().split('T')[0] : '', // Format to YYYY-MM-DD for date input
-        email: user.email || '',
-        phone: user.phone || ''
+        email: user.email,
+        password: user.password,
+        name: user.name,
+        role: user.role,
+        avatar: user.avatar
       });
     }
     console.log('input data', inputData);
@@ -69,8 +71,10 @@ const ModalUpdate = (props: ModalProps) => {
             const data = new FormData(form);
             if (user) {
               user.name = data.get('name') as string;
-              user.dob = new Date(data.get('dob') as string);
-              user.phone = data.get('phone') as string;
+              user.email = data.get('email') as string;
+              user.password = data.get('password') as string;
+              user.role = data.get('role') as string;
+              user.avatar = data.get('avatar') as string;
               UserRepo.updateUser(user);
               form.classList.remove('needs-validation');
               form.reset();

@@ -28,7 +28,7 @@ const UserForm = (props: UserFormProps) => {
 
       setInputData(props.inputData);
     }
-  }, [props.inputData]);
+  }, [props.inputData])
 
   return (
     <form
@@ -52,16 +52,17 @@ const UserForm = (props: UserFormProps) => {
       ></InputField>
 
       <InputField
-        label="Date of Birth"
-        name="dob"
-        type="date"
-        id="formDob"
-        value={inputData.dob}
+        label="Password"
+        placeholder="Enter password"
+        name="password"
+        type="password"
+        id="formPassword"
+        value={inputData.password}
         onChange={(e) => {
-          setInputData({ ...inputData, dob: e.target.value });
+          setInputData({ ...inputData, password: e.target.value });
           Validator.validateInputOnChange(e.target, props.checkEmailUniqueness);
         }}
-        validationMessage={`Date must be between ${Validator.minimalBirthDate.toLocaleDateString()} and ${Validator.maximalBirthDate.toLocaleDateString()}.`}
+        validationMessage={`Password must contains at least ${Validator.minimalPasswordLength} character(s).`}
       ></InputField>
 
       {props.addEmailField ? (
@@ -83,19 +84,32 @@ const UserForm = (props: UserFormProps) => {
       ) : null}
 
       <InputField
-        label="Phone number"
-        placeholder="Enter phone number (099) 123-4567"
-        name="phone"
+        label="Role"
+        placeholder="Enter role"
+        name="role"
         type="text"
-        id="formPhone"
-        value={inputData.phone}
+        id="formRole"
+        value={inputData.role}
         onChange={(e) => {
-          setInputData({ ...inputData, phone: e.target.value });
+          setInputData({ ...inputData, role: e.target.value });
           Validator.validateInputOnChange(e.target, props.checkEmailUniqueness);
         }}
-        validationMessage="Please provide a valid phone number."
+        validationMessage={`Role must contains at least ${Validator.minimalRoleLength} character(s).`}
       ></InputField>
-      {props.children}
+
+      <InputField
+        label="Avatar"
+        placeholder="Enter avatar url"
+        name="avatar"
+        type="text"
+        id="formAvatar"
+        value={inputData.avatar}
+        onChange={(e) => {
+          setInputData({ ...inputData, avatar: e.target.value });
+          Validator.validateInputOnChange(e.target, props.checkEmailUniqueness);
+        }}
+        validationMessage={`Avatar must be link.`}
+      ></InputField>
     </form>
   );
 };

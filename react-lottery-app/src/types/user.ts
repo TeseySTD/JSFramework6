@@ -1,17 +1,20 @@
 export class User {
     readonly id: string;
-    name: string;
-    dob: Date;
     email: string;
-    phone: string;
+    password: string;
+    name: string;
+    role: string;
+    avatar: string;
     isWinner: boolean = false;
 
-    constructor(name: string, dob: Date, email: string, phone: string) {
-        this.id = Math.random().toString(16).slice(2);
+    constructor(email: string, password: string, name: string, role: string, avatar: string, id?: string, isWinner?: boolean) {
+        this.id = id ?? (Math.random().toString(36).substring(7));
         this.name = name;
-        this.dob = dob;
         this.email = email;
-        this.phone = phone;
-        console.log('New user created with id: ' + this.id);
+        this.password = password;
+        this.role = role;
+        this.avatar = avatar;
+        this.isWinner = isWinner ?? false;
+        // console.log('New user created with id: ' + this.id);
     }
 }

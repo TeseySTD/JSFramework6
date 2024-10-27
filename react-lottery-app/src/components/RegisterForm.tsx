@@ -22,9 +22,10 @@ const RegisterForm = (props: RegisterFormProps) => {
       const data = new FormData(form);
       const newUser = new User(
         data.get('name') as string,
-        new Date(data.get('dob') as string),
         data.get('email') as string,
-        data.get('phone') as string
+        data.get('password') as string,
+        data.get('role') as string,
+        data.get('avatar') as string
       );
       UserRepo.addUser(newUser);
       form.classList.remove('needs-validation');

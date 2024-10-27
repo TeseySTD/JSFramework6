@@ -1,6 +1,7 @@
 export interface InputData {
-    name: string;
-    dob: string;
     email: string;
-    phone: string;
+    password: string;
+    name: string;
+    role: string;
+    avatar: string;
 }
