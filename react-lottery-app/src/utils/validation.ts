@@ -14,7 +14,6 @@ export class Validator {
     public static readonly minimalPasswordLength = 4;
     public static readonly minimalRoleLength = 2;
 
-
     static validateEmailFormat(email: string): boolean {
         return this._regexEmail.test(String(email).toLowerCase());
     }
@@ -67,11 +66,21 @@ export class Validator {
     ): boolean {
         let isValid: boolean = true;
         const formName = form.querySelector('#formName') as HTMLInputElement;
-        const formPassword = form.querySelector('#formPassword') as HTMLInputElement;
-        const formAvatar = form.querySelector('#formAvatar') as HTMLInputElement;
+        const formPassword = form.querySelector(
+            '#formPassword'
+        ) as HTMLInputElement;
+        const formAvatar = form.querySelector(
+            '#formAvatar'
+        ) as HTMLInputElement;
         const formRole = form.querySelector('#formRole') as HTMLInputElement;
         const formEmail = form.querySelector('#formEmail') as HTMLInputElement;
-        const inputs = [formName, formPassword, formRole, formEmail, formAvatar];
+        const inputs = [
+            formName,
+            formPassword,
+            formRole,
+            formEmail,
+            formAvatar
+        ];
 
         inputs.forEach((input) => {
             if (input) {

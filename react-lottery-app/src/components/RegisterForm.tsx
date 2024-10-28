@@ -41,7 +41,7 @@ const RegisterForm = (props: RegisterFormProps) => {
         onSubmit={handleSubmit}
         checkEmailUniqueness={true}
         addEmailField={true}
-        id='registerForm'
+        id="registerForm"
       >
         <DefaultButton type="submit" className="btn-info-custom align-self-end">
           Save

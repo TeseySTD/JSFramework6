@@ -11,6 +11,7 @@ export class UserRepo {
         users: User[],
         setStateAction: React.Dispatch<React.SetStateAction<User[]>>
     ) {
+        console.log('init repo');
         UserRepo._users = users;
         UserRepo._setStateAction = setStateAction;
     }
@@ -18,10 +19,10 @@ export class UserRepo {
     public static async SeedData(): Promise<User[]> {
         const users = localStorage.getItem('users');
         let usersList;
-        if(users == null) {
+        if (users == null) {
             // console.log('users list from storage is empty');
-            usersList = await UserFakeApi.getUsers();}
-        else{
+            usersList = await UserFakeApi.getUsers();
+        } else {
             // console.log('users list', users);
             usersList = JSON.parse(users);
             if (usersList.length == 0) {
@@ -30,7 +31,6 @@ export class UserRepo {
             }
             console.log(usersList);
         }
-
 
         return usersList;
     }
@@ -46,7 +46,7 @@ export class UserRepo {
     public static get users(): User[] {
         return UserRepo._users;
     }
-    
+
     public static updateUser(user: User): void {
         UserRepo._setStateAction(
             (UserRepo._users = UserRepo._users.map((u) =>
@@ -66,6 +66,7 @@ export class UserRepo {
     }
 
     public static getUserById(id: string): User | undefined {
+        console.log(UserRepo._users);
         return UserRepo._users.find((user) => user.id == id);
     }
 

@@ -6,17 +6,32 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createBrowserRouter, RouterProvider, Router} from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Router } from 'react-router-dom';
 import AppHeader from './components/AppHeader';
+import UserInfo, { loader } from './components/UserInfo';
+import { LoginForm } from './components/LoginForm';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <App/>,
+    path: '/',
+    element: <App />
   },
+  {
+    path: '/users/:userId',
+    element: <UserInfo />,
+    loader: loader
+  },
+  {
+    path: '/login',
+    element: <LoginForm />
+  },
+  {
+    path: '*',
+    element: <App />
+  }
 ]);
 root.render(
   <React.StrictMode>

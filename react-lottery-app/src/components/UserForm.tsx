@@ -28,7 +28,7 @@ const UserForm = (props: UserFormProps) => {
 
       setInputData(props.inputData);
     }
-  }, [props.inputData])
+  }, [props.inputData]);
 
   return (
     <form

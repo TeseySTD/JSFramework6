@@ -1,4 +1,4 @@
-import { UserRepo } from "../utils/user-repo";
+import { UserRepo } from '../utils/user-repo';
 
 export class User {
     readonly id: string;
@@ -9,7 +9,15 @@ export class User {
     avatar: string;
     isWinner: boolean = false;
 
-    constructor(email: string, password: string, name: string, role: string, avatar: string, id?: string, isWinner?: boolean) {
+    constructor(
+        email: string,
+        password: string,
+        name: string,
+        role: string,
+        avatar: string,
+        id?: string,
+        isWinner?: boolean
+    ) {
         this.id = id ?? UserRepo.GenerateUserId();
         this.name = name;
         this.email = email;
