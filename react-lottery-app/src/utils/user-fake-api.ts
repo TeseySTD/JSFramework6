@@ -26,7 +26,10 @@ export class UserFakeApi {
     }
 
     // Метод для входу в систему
-    public static async login(email: string, password: string): Promise<{ access_token: string; refresh_token: string } | null> {
+    public static async login(
+        email: string,
+        password: string
+    ): Promise<{ access_token: string; refresh_token: string } | null> {
         try {
             const response = await fetch(`${this._authLink}/login`, {
                 method: 'POST',
@@ -52,36 +55,20 @@ export class UserFakeApi {
     }
 
     // Метод для отримання профілю користувача
-    public static async getProfile(accessToken: string): Promise<User | null> {
-        try {
-            const response = await fetch(`${this._authLink}/profile`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch profile');
+    public static async checkTokenValid(accessToken: string): Promise<boolean> {
+        const response = await fetch(`${this._authLink}/profile`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
             }
+        });
 
-            const data = await response.json();
-            return new User(
-                data.email,
-                data.password, // Зазвичай пароль не передається, тому це може бути не обов'язковим
-                data.name,
-                data.role,
-                data.avatar,
-                data.id
-            );
-        } catch (error) {
-            console.log(error);
-            return null;
-        }
+        return response.ok;
     }
 
-    // Метод для отримання нового токена доступу за допомогою refresh токена
-    public static async refreshAccessToken(refreshToken: string): Promise<{ access_token: string; refresh_token: string } | null> {
+    public static async refreshAccessToken(
+        refreshToken: string
+    ): Promise<{ access_token: string; refresh_token: string } | null> {
         try {
             const response = await fetch(`${this._authLink}/refresh-token`, {
                 method: 'POST',
@@ -91,7 +78,7 @@ export class UserFakeApi {
                 body: JSON.stringify({ refreshToken })
             });
 
-            if (!response.ok) {
+            if (!response.ok) {  
                 throw new Error('Failed to refresh token');
             }
 

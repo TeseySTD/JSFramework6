@@ -16,10 +16,6 @@ const root = ReactDOM.createRoot(
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <App />
-  },
-  {
     path: '/users/:userId',
     element: <UserInfo />,
     loader: loader

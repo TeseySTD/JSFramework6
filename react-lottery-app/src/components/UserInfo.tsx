@@ -48,35 +48,35 @@ export default function UserInfo(props: UserInfoProps) {
   }, [UserRepo.users]);
   if (user) {
     return (
-        <Container className="d-flex justify-content-center align-items-start min-vh-100 mt-5 fs-4">
-            <Card className="text-center shadow-lg" style={{ width: '18rem' }}>
-                <Card.Img
-                    variant="top"
-                    src={user.avatar}
-                    alt={user.name}
-                    className="rounded-circle mx-auto mt-3"
-                    style={{ width: '100px', height: '100px' }}
-                />
-                <Card.Body>
-                    <Card.Title>{user.name}</Card.Title>
-                    <Card.Text>
-                        <strong>Email:</strong> {user.email} <br />
-                        <strong>Role:</strong> {user.role} <br />
-                        <strong>Is Winner:</strong> {user.isWinner ? 'Yes' : 'No'}
-                    </Card.Text>
-                </Card.Body>
-            </Card>
-        </Container>
+      <Container className="d-flex justify-content-center align-items-start min-vh-100 mt-5 fs-4">
+        <Card className="text-center shadow-lg" style={{ width: '18rem' }}>
+          <Card.Img
+            variant="top"
+            src={user.avatar}
+            alt={user.name}
+            className="rounded-circle mx-auto mt-3"
+            style={{ width: '100px', height: '100px' }}
+          />
+          <Card.Body>
+            <Card.Title>{user.name}</Card.Title>
+            <Card.Text>
+              <strong>Email:</strong> {user.email} <br />
+              <strong>Role:</strong> {user.role} <br />
+              <strong>Is Winner:</strong> {user.isWinner ? 'Yes' : 'No'}
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      </Container>
     );
-} else {
+  } else {
     return (
-        <Container className="d-flex justify-content-center align-items-start min-vh-100 mt-5 fs-4">
-            <Card className="text-center shadow-lg" style={{ width: '18rem' }}>
-                <Card.Body>
-                    <Card.Title>User Not Found</Card.Title>
-                </Card.Body>
-            </Card>
-        </Container>
+      <Container className="d-flex justify-content-center align-items-start min-vh-100 mt-5 fs-4">
+        <Card className="text-center shadow-lg" style={{ width: '18rem' }}>
+          <Card.Body>
+            <Card.Title>User Not Found</Card.Title>
+          </Card.Body>
+        </Card>
+      </Container>
     );
-}
+  }
 }
