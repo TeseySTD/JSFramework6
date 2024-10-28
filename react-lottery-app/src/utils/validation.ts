@@ -1,9 +1,8 @@
 import InputField from '../components/InputField';
 import { UserRepo } from './user-repo';
+import * as yup from 'yup';
 
 export class Validator {
-    private static readonly _phoneRegex =
-        /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
     private static readonly _regexEmail =
         /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
 
@@ -13,6 +12,14 @@ export class Validator {
     public static readonly minimalNameLength = 1;
     public static readonly minimalPasswordLength = 4;
     public static readonly minimalRoleLength = 2;
+
+    public static readonly basicSchema = yup.object().shape({
+        name: yup.string().required("Name is required").min(this.minimalNameLength, 'Name is too short'),
+        email: yup.string().required("Email is required").email('Invalid email format'),
+        password: yup.string().required("Password is required").min(this.minimalPasswordLength, 'Password is too short'),
+        role: yup.string().required("Role is required").min(this.minimalRoleLength, 'Role is too short'),
+        avatar: yup.string().required("Avatar is required").url('Avatar must be a valid URL'),
+    });
 
     static validateEmailFormat(email: string): boolean {
         return this._regexEmail.test(String(email).toLowerCase());

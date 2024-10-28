@@ -36,6 +36,20 @@ const ModalUpdate = (props: ModalProps) => {
     console.log('input data', inputData);
   };
 
+  const handleSubmit = (input: InputData) => {
+    const modal = document.getElementById('updateModal');
+    const id = modal?.getAttribute('id-to-update') as string;
+    const user = UserRepo.getUserById(id);
+    console.log('user update', user);
+    if (user) {
+      user.name = input.name;
+      user.password = input.password;
+      user.role = input.role;
+      user.avatar = input.avatar;
+      UserRepo.updateUser(user);
+    }
+  }
+
   useEffect(() => {
     const modal = document.getElementById('updateModal');
     modal?.addEventListener('shown.bs.modal', getInputData);
@@ -58,28 +72,7 @@ const ModalUpdate = (props: ModalProps) => {
     >
       <UserForm
         id="updateForm"
-        onSubmit={(e) => {
-          e.preventDefault();
-          const form = e.target as HTMLFormElement;
-          if (!Validator.validateForm(form)) {
-            form.classList.add('needs-validation');
-          } else {
-            const modal = document.getElementById('updateModal');
-            const id = modal?.getAttribute('id-to-update') as string;
-            const user = UserRepo.getUserById(id);
-            console.log('user update', user);
-            const data = new FormData(form);
-            if (user) {
-              user.name = data.get('name') as string;
-              user.password = data.get('password') as string;
-              user.role = data.get('role') as string;
-              user.avatar = data.get('avatar') as string;
-              UserRepo.updateUser(user);
-              form.classList.remove('needs-validation');
-              form.reset();
-            }
-          }
-        }}
+        onSubmit={handleSubmit}
         inputData={inputData}
       />
     </Modal>

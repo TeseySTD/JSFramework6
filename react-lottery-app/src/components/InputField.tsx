@@ -8,6 +8,7 @@ interface InputFieldProps {
   id?: string;
   value?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
   className?: string;
   validationMessage?: string;
 }
@@ -23,9 +24,10 @@ const InputField = (props: InputFieldProps) => {
         name={props.name}
         type={props.type}
         id={props.id}
-        className="form-control"
+        className={`form-control ${props.className ?? ''}`}
         value={props.value}
         onChange={props.onChange}
+        onBlur={props.onBlur}
       />
       <div className="invalid-feedback">{props.validationMessage}</div>
     </div>

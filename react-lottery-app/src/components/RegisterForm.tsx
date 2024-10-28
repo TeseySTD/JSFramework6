@@ -12,25 +12,15 @@ interface RegisterFormProps {
   // onSubmit: FormEventHandler<HTMLFormElement>;
 }
 const RegisterForm = (props: RegisterFormProps) => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log('Form submitted');
-    e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    if (!Validator.validateForm(form, true)) {
-      form.classList.add('needs-validation');
-    } else {
-      const data = new FormData(form);
-      const newUser = new User(
-        data.get('email') as string,
-        data.get('password') as string,
-        data.get('name') as string,
-        data.get('role') as string,
-        data.get('avatar') as string
-      );
-      UserRepo.addUser(newUser);
-      form.classList.remove('needs-validation');
-      form.reset();
-    }
+  const handleSubmit = (input : InputData) => {
+    const newUser = new User(
+      input.email,
+      input.password,
+      input.name,
+      input.role,
+      input.avatar
+    );
+    UserRepo.addUser(newUser);
   };
 
   return (

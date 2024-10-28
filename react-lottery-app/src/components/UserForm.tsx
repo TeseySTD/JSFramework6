@@ -8,9 +8,10 @@ import { Validator } from '../utils/validation';
 import DefaultButton from './DefaultButton';
 import InputField from './InputField';
 import { InputData } from '../interfaces/input-data';
+import {useFormik} from 'formik';
 
 interface UserFormProps {
-  onSubmit: FormEventHandler<HTMLFormElement>;
+  onSubmit: (input : InputData) => void;
   children?: React.ReactNode;
   id?: string;
   inputData?: InputData;
@@ -22,18 +23,38 @@ const UserForm = (props: UserFormProps) => {
     ...((props.inputData ?? {}) as InputData)
   });
 
+
+  const {values, handleChange, handleBlur, touched, errors, handleSubmit  } = useFormik({
+    initialValues: {
+      name: '',
+      password: '',
+      email: '',
+      role: '',
+      avatar: ''
+    },
+    validationSchema: Validator.basicSchema,
+    onSubmit: props.onSubmit
+  })
+
+  console.log(errors);
+
   useEffect(() => {
     if (props.inputData) {
       console.log('form message');
 
       setInputData(props.inputData);
+      values.name = props.inputData.name;
+      values.password = props.inputData.password;
+      values.email = props.inputData.email;
+      values.role = props.inputData.role;
+      values.avatar = props.inputData.avatar;
     }
   }, [props.inputData]);
 
   return (
     <form
       className="d-flex flex-column"
-      onSubmit={props.onSubmit}
+      onSubmit={handleSubmit}
       noValidate
       id={props.id}
     >
@@ -42,13 +63,12 @@ const UserForm = (props: UserFormProps) => {
         placeholder="Enter user name"
         name="name"
         type="text"
-        value={inputData.name}
+        value={values.name}
         id="formName"
-        onChange={(e) => {
-          setInputData({ ...inputData, name: e.target.value });
-          Validator.validateInputOnChange(e.target, props.checkEmailUniqueness);
-        }}
-        validationMessage={`Name must contains at least ${Validator.minimalNameLength} character(s).`}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        className={errors.name && touched.name ? 'is-invalid' : ''}
+        validationMessage={touched.name && errors.name ? errors.name : ''}
       ></InputField>
 
       <InputField
@@ -57,12 +77,11 @@ const UserForm = (props: UserFormProps) => {
         name="password"
         type="password"
         id="formPassword"
-        value={inputData.password}
-        onChange={(e) => {
-          setInputData({ ...inputData, password: e.target.value });
-          Validator.validateInputOnChange(e.target, props.checkEmailUniqueness);
-        }}
-        validationMessage={`Password must contains at least ${Validator.minimalPasswordLength} character(s).`}
+        value={values.password}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        className={errors.password && touched.password ? 'is-invalid' : ''}
+        validationMessage={touched.password && errors.password ? errors.password : ''}
       ></InputField>
 
       {props.addEmailField ? (
@@ -72,14 +91,11 @@ const UserForm = (props: UserFormProps) => {
           name="email"
           type="email"
           id="formEmail"
-          value={inputData.email}
-          onChange={(e) => {
-            setInputData({ ...inputData, email: e.target.value });
-            Validator.validateInputOnChange(
-              e.target,
-              props.checkEmailUniqueness
-            );
-          }}
+          value={values.email}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          className={errors.email && touched.email ? 'is-invalid' : ''}
+          validationMessage={touched.email && errors.email ? errors.email : ''}
         ></InputField>
       ) : null}
 
@@ -89,12 +105,11 @@ const UserForm = (props: UserFormProps) => {
         name="role"
         type="text"
         id="formRole"
-        value={inputData.role}
-        onChange={(e) => {
-          setInputData({ ...inputData, role: e.target.value });
-          Validator.validateInputOnChange(e.target, props.checkEmailUniqueness);
-        }}
-        validationMessage={`Role must contains at least ${Validator.minimalRoleLength} character(s).`}
+        value={values.role}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        className={errors.role && touched.role ? 'is-invalid' : ''}
+        validationMessage={touched.role && errors.role ? errors.role : ''}
       ></InputField>
 
       <InputField
@@ -103,12 +118,11 @@ const UserForm = (props: UserFormProps) => {
         name="avatar"
         type="text"
         id="formAvatar"
-        value={inputData.avatar}
-        onChange={(e) => {
-          setInputData({ ...inputData, avatar: e.target.value });
-          Validator.validateInputOnChange(e.target, props.checkEmailUniqueness);
-        }}
-        validationMessage={`Avatar must be link.`}
+        value={values.avatar}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        className={errors.avatar && touched.avatar ? 'is-invalid' : ''}
+        validationMessage={touched.avatar && errors.avatar ? errors.avatar : ''}
       ></InputField>
       {props.children}
     </form>
